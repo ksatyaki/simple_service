@@ -1,0 +1,5 @@
+geometry_msgs/PoseStamped goal_pose
+float32 xy_tolerance
+float32 yaw_tolerance
+---
+---

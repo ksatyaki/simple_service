@@ -1,0 +1,3 @@
+<launch>
+	<node ns="jaco" name="jaco_test" pkg="simple_service" type="jaco_test"/>
+</launch>
