@@ -175,46 +175,63 @@ void* JointStateToPeis::joint_state_publisher_thread(void *object)
 
 	char *joint_effort_str = new char[50];
 	char *joint_position_str = new char[50];
-	char *joint_velocity_str = new char[50];
+
+	char *finger_position_str = new char[30];
+	char *finger_effort_str = new char[30];
 
 	ROS_INFO("Started publishing joint states to PEIS...");
 
 	while(ros::ok() && peisk_isRunning())
 	{
 		if(((JointStateToPeis*) object)->joint_state_msg_.position.size() != 9)
+		{
 			strcpy(joint_position_str, "0.0 0.0 0.0 0.0 0.0 0.0");
+			strcpy(finger_position_str, "0.0 0.0 0.0");
+		}
 		else
+		{
 			sprintf(joint_position_str, "%0.4lf %0.4lf %0.4lf %0.4lf %0.4lf %0.4lf",
 				((JointStateToPeis*) object)->joint_state_msg_.position[0], ((JointStateToPeis*) object)->joint_state_msg_.position[1],
 				((JointStateToPeis*) object)->joint_state_msg_.position[2], ((JointStateToPeis*) object)->	joint_state_msg_.position[3],
 				((JointStateToPeis*) object)->joint_state_msg_.position[4], ((JointStateToPeis*) object)->joint_state_msg_.position[5]);
 
-		if(((JointStateToPeis*) object)->joint_state_msg_.velocity.size() != 9)
-			strcpy(joint_velocity_str, "0.0 0.0 0.0 0.0 0.0 0.0");
-		else
-			sprintf(joint_velocity_str, "%0.4lf %0.4lf %0.4lf %0.4lf %0.4lf %0.4lf",
-				((JointStateToPeis*) object)->joint_state_msg_.velocity[0], ((JointStateToPeis*) object)->joint_state_msg_.velocity[1],
-				((JointStateToPeis*) object)->joint_state_msg_.velocity[2], ((JointStateToPeis*) object)->joint_state_msg_.velocity[3],
-				((JointStateToPeis*) object)->joint_state_msg_.velocity[4], ((JointStateToPeis*) object)->joint_state_msg_.velocity[5]);
+			sprintf(finger_position_str, "%0.4lf %0.4lf %0.4lf",
+					((JointStateToPeis*) object)->joint_state_msg_.position[6],
+					((JointStateToPeis*) object)->joint_state_msg_.position[7],
+					((JointStateToPeis*) object)->joint_state_msg_.position[8]);
+		}
 
 		if(((JointStateToPeis*) object)->joint_state_msg_.effort.size() != 9)
+		{
 			strcpy(joint_effort_str, "0.0 0.0 0.0 0.0 0.0 0.0");
+			strcpy(finger_effort_str, "0.0 0.0 0.0");
+		}
 		else
+		{
 			sprintf(joint_effort_str, "%0.4lf %0.4lf %0.4lf %0.4lf %0.4lf %0.4lf",
 				((JointStateToPeis*) object)->joint_state_msg_.effort[0], ((JointStateToPeis*) object)->joint_state_msg_.effort[1],
 				((JointStateToPeis*) object)->joint_state_msg_.effort[2], ((JointStateToPeis*) object)->joint_state_msg_.effort[3],
 				((JointStateToPeis*) object)->joint_state_msg_.effort[4], ((JointStateToPeis*) object)->joint_state_msg_.effort[5]);
 
-		peiskmt_setStringTuple("jaco_joint_states.velocity", joint_velocity_str);
+			sprintf(finger_effort_str, "%0.4lf %0.4lf %0.4lf",
+					((JointStateToPeis*) object)->joint_state_msg_.effort[6],
+					((JointStateToPeis*) object)->joint_state_msg_.effort[7],
+					((JointStateToPeis*) object)->joint_state_msg_.effort[8]);
+		}
+
 		peiskmt_setStringTuple("jaco_joint_states.position", joint_position_str);
 		peiskmt_setStringTuple("jaco_joint_states.effort", joint_effort_str);
+		peiskmt_setStringTuple("jaco_finger.position", finger_position_str);
+		peiskmt_setStringTuple("jaco_finger.effort", finger_effort_str);
 
 		(((JointStateToPeis*) object)->joint_state_pub_freq_)->sleep();
 	}
 
 	delete joint_effort_str;
 	delete joint_position_str;
-	delete joint_velocity_str;
+
+	delete finger_position_str;
+	delete finger_effort_str;
 
 	return NULL;
 }
