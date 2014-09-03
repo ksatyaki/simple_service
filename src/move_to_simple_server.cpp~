@@ -146,18 +146,6 @@ geometry_msgs::PoseStamped MoveToSimpleServer::getCurrentPose()
 		ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
 	}
 	
-	else if(_tf_listener.waitForTransform("map", "base_link", _now_stamp_, ros::Duration(1)))
-	{
-		try
-		{
-			_tf_listener.lookupTransform("map", "base_link", _now_stamp_, start_pose_in_tf);
-		}
-		catch(tf::TransformException& ex)
-		{
-			ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
-		}
-	}
-
 	tf::Vector3 start_position = start_pose_in_tf.getOrigin();
 	tf::Quaternion start_orientation = start_pose_in_tf.getRotation();
 

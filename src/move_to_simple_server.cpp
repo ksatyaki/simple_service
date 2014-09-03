@@ -137,29 +137,16 @@ geometry_msgs::PoseStamped MoveToSimpleServer::getCurrentPose()
 	
 	tf::StampedTransform start_pose_in_tf;
 	
-	if(_tf_listener.waitForTransform("odom", "base_link", _now_stamp_, ros::Duration(1)))
+	_tf_listener.waitForTransform("odom", "base_link", _now_stamp_, ros::Duration(1));
+	try
 	{
-		try
-		{
-			_tf_listener.lookupTransform("odom", "base_link", _now_stamp_, start_pose_in_tf);
-		}
-		catch(tf::TransformException& ex)
-		{
-			ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
-		}
+		_tf_listener.lookupTransform("odom", "base_link", _now_stamp_, start_pose_in_tf);
 	}
-	else if(_tf_listener.waitForTransform("map", "base_link", _now_stamp_, ros::Duration(1)))
+	catch(tf::TransformException& ex)
 	{
-		try
-		{
-			_tf_listener.lookupTransform("map", "base_link", _now_stamp_, start_pose_in_tf);
-		}
-		catch(tf::TransformException& ex)
-		{
-			ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
-		}
+		ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
 	}
-
+	
 	tf::Vector3 start_position = start_pose_in_tf.getOrigin();
 	tf::Quaternion start_orientation = start_pose_in_tf.getRotation();
 
