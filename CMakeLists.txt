@@ -112,12 +112,14 @@ add_executable(move_to_simple_server src/move_to_simple_server.cpp)
 add_executable(joint_state_to_peis src/joint_state_to_peis.cpp)
 
 # TESTs
-add_executable(test_client_1 src/simple_1.cc)
-add_executable(jaco_test src/jaco_test.cc)
+# add_executable(test_client_1 src/test_cpp/simple_1.cc)
+# add_executable(jaco_test src/test_cpp/jaco_test.cc)
+add_executable(test_ptu src/test_cpp/test_ptu.cc)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(simple_service_node simple_service_generate_messages_cpp)
+add_dependencies(move_to_simple_server simple_service_generate_messages_cpp)
+add_dependencies(test_ptu simple_service_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(move_to_simple_server
@@ -131,13 +133,17 @@ target_link_libraries(joint_state_to_peis
   peiskernel_mt
 )
 
-target_link_libraries(test_client_1 
-  ${catkin_LIBRARIES}
+#target_link_libraries(test_client_1 
+# ${catkin_LIBRARIES}
+#)
+
+target_link_libraries(test_ptu 
+ ${catkin_LIBRARIES}
 )
 
-target_link_libraries(jaco_test 
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(jaco_test 
+# ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##

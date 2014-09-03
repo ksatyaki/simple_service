@@ -137,17 +137,15 @@ geometry_msgs::PoseStamped MoveToSimpleServer::getCurrentPose()
 	
 	tf::StampedTransform start_pose_in_tf;
 	
-	if(_tf_listener.waitForTransform("odom", "base_link", _now_stamp_, ros::Duration(1)))
+	try
 	{
-		try
-		{
-			_tf_listener.lookupTransform("odom", "base_link", _now_stamp_, start_pose_in_tf);
-		}
-		catch(tf::TransformException& ex)
-		{
-			ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
-		}
+		_tf_listener.lookupTransform("odom", "base_link", _now_stamp_, start_pose_in_tf);
 	}
+	catch(tf::TransformException& ex)
+	{
+		ROS_INFO("TRANSFORMS ARE COCKED-UP PAL! Why is that :=> %s", ex.what());
+	}
+	
 	else if(_tf_listener.waitForTransform("map", "base_link", _now_stamp_, ros::Duration(1)))
 	{
 		try
