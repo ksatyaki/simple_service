@@ -22,6 +22,8 @@
 
 #define GOAL_TOLERANCE 0.1
 
+namespace simple_service {
+
 class MoveToSimpleServer
 {
 	/**
@@ -32,7 +34,7 @@ class MoveToSimpleServer
 	/**
 	 * The actual actionlib server.
 	 */
-	actionlib::SimpleActionServer <simple_service::MoveToSimpleAction> _server;
+	actionlib::SimpleActionServer <MoveToSimpleAction> _server;
 
 	/**
 	 * A Listener to read transform information.
@@ -53,7 +55,7 @@ public:
 	/**
 	 * Called when goal is received.
 	 */
-	void goalCallback(const simple_service::MoveToSimpleGoalConstPtr& goal);
+	void goalCallback(const MoveToSimpleGoalConstPtr& goal);
 
 	/**
 	 * Get the current pose.
@@ -68,6 +70,8 @@ public:
 	virtual ~MoveToSimpleServer();
 
 };
+
+} // NAMESPACE simple_service //
 
 /**
  * A convenience overloading.

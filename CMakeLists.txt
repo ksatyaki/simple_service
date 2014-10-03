@@ -109,32 +109,21 @@ include_directories(
 
 ## Declare a cpp executable
 add_executable(move_to_simple_server src/move_to_simple_server.cpp)
-#add_executable(joint_state_to_peis src/joint_state_to_peis.cpp)
+add_executable(move_to_simple_client src/test_cpp/simple_1.cc)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 add_dependencies(move_to_simple_server simple_service_generate_messages_cpp)
+add_dependencies(move_to_simple_client simple_service_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(move_to_simple_server
   ${catkin_LIBRARIES}
 )
 
-#target_link_libraries(joint_state_to_peis
-#  ${catkin_LIBRARIES}
-#  pthread
-#  peiskernel
-#  peiskernel_mt
-#)
-
-#target_link_libraries(test_client_1 
-# ${catkin_LIBRARIES}
-#)
-
-#target_link_libraries(jaco_test 
-# ${catkin_LIBRARIES}
-#)
-
+target_link_libraries(move_to_simple_client
+  ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############

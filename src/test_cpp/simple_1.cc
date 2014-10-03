@@ -42,6 +42,8 @@ int main(int argn, char *args[])
 		std::cin>>a.goal_pose.pose.orientation.z;
 		std::cin>>a.goal_pose.pose.orientation.w;
 
+		std::cin>>a.driving_direction;
+
 		a.xy_tolerance = 0.1;
 		a.yaw_tolerance = 0.1;
 

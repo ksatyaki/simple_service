@@ -1,5 +1,8 @@
 geometry_msgs/PoseStamped goal_pose
 float32 xy_tolerance
 float32 yaw_tolerance
+uint8 driving_direction
+uint8 FORWARD=0
+uint8 REVERSE=1
 ---
 ---

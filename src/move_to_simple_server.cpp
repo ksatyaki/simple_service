@@ -7,6 +7,8 @@
 
 #include "simple_service/move_to_simple_server.h"
 
+namespace simple_service {
+
 MoveToSimpleServer::MoveToSimpleServer(std::string cmd_vel_topi_name) :
 _server(_nh, "move_to_simple", boost::bind(&MoveToSimpleServer::goalCallback, this, _1), false) ,
 _tf_listener(ros::Duration(2))
@@ -23,9 +25,14 @@ MoveToSimpleServer::~MoveToSimpleServer()
 
 }
 
-void MoveToSimpleServer::goalCallback(const simple_service::MoveToSimpleGoalConstPtr& goal)
+void MoveToSimpleServer::goalCallback(const MoveToSimpleGoalConstPtr& goal)
 {
 	ROS_INFO("Got a new goal to work on... Hmmm...");
+
+	int driving_direction = 1;
+
+	if(goal->driving_direction == MoveToSimpleGoal::REVERSE)
+		driving_direction = -1;
 
 	geometry_msgs::PoseStamped start_pose = getCurrentPose();
 
@@ -57,16 +64,20 @@ void MoveToSimpleServer::goalCallback(const simple_service::MoveToSimpleGoalCons
 		////////////////////////////
 		///// Publish velocity /////
 		////////////////////////////
-		angle = atan2(final_point.y - current_pose.pose.position.y, final_point.x - current_pose.pose.position.x);
+		if(driving_direction == 1)
+			angle = atan2(final_point.y - current_pose.pose.position.y, final_point.x - current_pose.pose.position.x);
+		else
+			angle = atan2(current_pose.pose.position.y - final_point.y, current_pose.pose.position.x - final_point.x);
+
 		float error_fi = angle - (2 * atan2(current_pose.pose.orientation.z, current_pose.pose.orientation.w));
 
 		geometry_msgs::Twist resultant_velocity;
 
 		if( sqrt( (final_point.x - current_pose.pose.position.x) * (final_point.x - current_pose.pose.position.x) +
 				   (final_point.y - current_pose.pose.position.y) * (final_point.y - current_pose.pose.position.y)) < 0.75)
-			resultant_velocity.linear.x = 0.15;
+			resultant_velocity.linear.x = 0.15 * driving_direction;
 		else
-			resultant_velocity.linear.x = 0.3;
+			resultant_velocity.linear.x = 0.3 * driving_direction;
 
 		resultant_velocity.angular.z = (atan2( sin(error_fi), cos(error_fi)) * 0.66);
 
@@ -181,11 +192,13 @@ geometry_msgs::Point operator + (geometry_msgs::Point a, geometry_msgs::Point b)
 	return result;
 }
 
+} // NAMESPACE simple_service //
+
 int main(int argn, char* args[])
 {
 	ros::init(argn, args, "move_to_simple");
 
-	MoveToSimpleServer move_to_server;
+	simple_service::MoveToSimpleServer move_to_server;
 
 	ros::spin();
 }
