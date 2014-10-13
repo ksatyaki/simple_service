@@ -35,6 +35,8 @@ int main(int argn, char *args[])
 	simple_client.waitForServer();
 	ROS_INFO("Found. Sending goal.");
 
+	int num;
+
 	while(ros::ok())
 	{
 		std::cin>>a.goal_pose.pose.position.x;
@@ -42,7 +44,12 @@ int main(int argn, char *args[])
 		std::cin>>a.goal_pose.pose.orientation.z;
 		std::cin>>a.goal_pose.pose.orientation.w;
 
-		std::cin>>a.driving_direction;
+
+		std::cin>>num;
+		if(num == 1)
+			a.driving_direction = simple_service::MoveToSimpleGoal::REVERSE;
+		else
+			a.driving_direction = simple_service::MoveToSimpleGoal::FORWARD;
 
 		a.xy_tolerance = 0.1;
 		a.yaw_tolerance = 0.1;

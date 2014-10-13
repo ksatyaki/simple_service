@@ -88,7 +88,7 @@ void MoveToSimpleServer::goalCallback(const MoveToSimpleGoalConstPtr& goal)
 
 		_cmd_vel_pub.publish(resultant_velocity);
 
-		ROS_INFO("Velocities: x, theta = (%f, %f)", resultant_velocity.linear.x, resultant_velocity.angular.z);
+		//ROS_INFO("Velocities: x, theta = (%f, %f)", resultant_velocity.linear.x, resultant_velocity.angular.z);
 		//ROS_INFO("ANGLE: (%f) and [%f]", angle, (2 * atan2(current_pose.pose.orientation.z, current_pose.pose.orientation.w)));
 
 		////////////////////////////////////
@@ -128,8 +128,8 @@ void MoveToSimpleServer::goalCallback(const MoveToSimpleGoalConstPtr& goal)
 
 		_cmd_vel_pub.publish(resultant_velocity);
 
-		ROS_INFO("ANGLE: goal_relative: %f", goal_fi_relative);
-		ROS_INFO("del_fi: (%f)", del_fi);
+		//ROS_INFO("ANGLE: goal_relative: %f", goal_fi_relative);
+		//ROS_INFO("del_fi: (%f)", del_fi);
 
 		publish_rate.sleep();
 
