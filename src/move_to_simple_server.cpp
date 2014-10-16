@@ -148,7 +148,7 @@ geometry_msgs::PoseStamped MoveToSimpleServer::getCurrentPose()
 	
 	tf::StampedTransform start_pose_in_tf;
 	
-	_tf_listener.waitForTransform("odom", "base_link", _now_stamp_, ros::Duration(1));
+	_tf_listener.waitForTransform("odom", "base_link", _now_stamp_, ros::Duration(2.0));
 	try
 	{
 		_tf_listener.lookupTransform("odom", "base_link", _now_stamp_, start_pose_in_tf);
